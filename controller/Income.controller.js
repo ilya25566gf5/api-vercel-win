@@ -16,8 +16,7 @@ const IncomeController = {
         }
     },
 
-
-addIncome: async (req, res) => {
+    addIncome: async (req, res) => {
         try {
             if (!req.body.income_type ||!req.body.amount ||!req.body.date ||!req.body.id_family) {
                 return res.status(400).json({ message: "Missing required fields." });
