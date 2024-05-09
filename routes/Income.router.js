@@ -1,5 +1,5 @@
 const express = require("express");
-const router = express.Router();
+const router = express.Router(); //
 const IncomeController = require("../controller/Income.controller");
 
 router.get("/", IncomeController.getAll);// метод для вывода данных
