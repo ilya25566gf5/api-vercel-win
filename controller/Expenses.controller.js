@@ -1,27 +1,25 @@
 const pool = require("../database/index");
 
-const ExpensesController3 = {
-    getAllLastThree: async (req, res) => {
+const ExpensesController = {
+    getAll: async (req, res) => {
         try {
-            // Измененный запрос для выбора только нужных столбцов
-            const [rows, fields] = await pool.query("SELECT description, amount, date FROM Expenses ORDER BY date DESC LIMIT 3");
+            const [rows, fields] = await pool.query("SELECT description, amount, date FROM Expenses");
             const formattedRows = rows.map(row => ({
                 description: row.description,
                 amount: row.amount,
                 date: `${row.date.getFullYear()}-${String(row.date.getMonth() + 1).padStart(2, '0')}-${String(row.date.getDate()).padStart(2, '0')}`
             }));
-    
+
             res.json(formattedRows);
         } catch (error) {
             console.error(error);
             res.status(500).json({ message: "An error occurred while fetching data." });
         }
     },
-    
 
-    addExpense: async (req, res) => {
+    addExpens: async (req, res) => {
         try {
-            if (!req.body.id_family ||!req.body.id_category ||!req.body.description ||!req.body.amount ||!req.body.date) {
+            if (!req.body.id_family ||req.body.id_category ||req.body.description ||req.body.amount ||req.body.date) {
                 return res.status(400).json({ message: "Missing required fields." });
             }
             const { id_family, id_category, description, amount, date } = req.body;
@@ -44,9 +42,9 @@ const ExpensesController3 = {
         }
     },
 
-    updateExpense: async (req, res) => {
+    updateExpens: async (req, res) => {
         try {
-            if (!req.params.id ||!req.body.id_family ||!req.body.id_category ||!req.body.description ||!req.body.amount ||!req.body.date) {
+            if (!req.params.id ||req.body.id_family ||req.body.id_category ||req.body.description ||req.body.amount ||req.body.date) {
                 return res.status(400).json({ message: "Missing required fields or ID." });
             }
             const { id_family, id_category, description, amount, date } = req.body;
@@ -68,7 +66,23 @@ const ExpensesController3 = {
             console.error(error);
             res.status(500).json({ message: "An error occurred while updating expense." });
         }
-    }   
+    },
+
+    deleteExpens: async (req, res) => {
+        try {
+            const { id_expenditure } = req.params;
+            const [result] = await pool.query("DELETE FROM Expenses WHERE id_expenditure =?", [id_expenditure]);
+
+            if (result.affectedRows > 0) {
+                res.status(200).json({ message: "Expense deleted successfully." });
+            } else {
+                res.status(404).json({ message: "Expense not found or failed to delete." });
+            }
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: "An error occurred while deleting expense." });
+        }
+    }
 }
 
-module.exports = ExpensesController3;
+module.exports = ExpensesController;
