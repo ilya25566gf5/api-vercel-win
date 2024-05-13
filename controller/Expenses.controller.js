@@ -7,7 +7,7 @@ const ExpensesController = {
             const formattedRows = rows.map(row => ({
                 description: row.description,
                 amount: row.amount,
-                date: `${row.date.getFullYear()}-${String(row.date.getMonth() + 1).padStart(2, '0')}-${String(row.date.getDate()).padStart(2, '0')}`
+                date: `${new Date(row.date).toISOString().split('T')[0]}`
             }));
 
             res.json(formattedRows);
@@ -19,7 +19,7 @@ const ExpensesController = {
 
     addExpens: async (req, res) => {
         try {
-            if (!req.body.id_family ||req.body.id_category ||req.body.description ||req.body.amount ||req.body.date) {
+            if (!req.body.id_family ||!req.body.id_category ||!req.body.description ||!req.body.amount ||!req.body.date) {
                 return res.status(400).json({ message: "Missing required fields." });
             }
             const { id_family, id_category, description, amount, date } = req.body;
@@ -44,7 +44,7 @@ const ExpensesController = {
 
     updateExpens: async (req, res) => {
         try {
-            if (!req.params.id ||req.body.id_family ||req.body.id_category ||req.body.description ||req.body.amount ||req.body.date) {
+            if (!req.params.id ||!req.body.id_family ||!req.body.id_category ||!req.body.description ||!req.body.amount ||!req.body.date) {
                 return res.status(400).json({ message: "Missing required fields or ID." });
             }
             const { id_family, id_category, description, amount, date } = req.body;
@@ -86,3 +86,4 @@ const ExpensesController = {
 }
 
 module.exports = ExpensesController;
+
