@@ -3,8 +3,14 @@ const pool = require("../database/index");
 const ExpensesController = {
     getAll: async (req, res) => {
         try {
-            const [rows, fields] = await pool.query("SELECT description, amount, date FROM Expenses");
+            // Измененный запрос для выбора всех полей
+            const [rows, fields] = await pool.query("SELECT * FROM Expenses");
+            
+            // Форматирование результатов
             const formattedRows = rows.map(row => ({
+                id_expenditure: row.id_expenditure,
+                id_family: row.id_family,
+                id_category: row.id_category,
                 description: row.description,
                 amount: row.amount,
                 date: `${new Date(row.date).toISOString().split('T')[0]}`
