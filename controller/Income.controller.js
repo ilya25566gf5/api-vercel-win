@@ -3,8 +3,10 @@ const pool = require("../database/index");
 const IncomeController = {
     getAll: async (req, res) => {
         try {
-            const [rows, fields] = await pool.query("SELECT amount, date FROM Income");
+            // Измененный запрос, включающий income_type
+            const [rows, fields] = await pool.query("SELECT income_type, amount, date FROM Income");
             const formattedRows = rows.map(row => ({
+                incomeType: row.income_type, // Добавлено поле incomeType для хранения income_type
                 amount: row.amount,
                 all: `${row.date.getFullYear()}-${String(row.date.getMonth() + 1).padStart(2, '0')}-${String(row.date.getDate()).padStart(2, '0')}`
             }));
