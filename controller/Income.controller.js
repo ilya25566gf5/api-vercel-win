@@ -70,9 +70,9 @@ const IncomeController = {
 
     deleteIncome: async (req, res) => {
         try {
-            const { id } = req.params; // Исправлено на использование id
-            const [result] = await pool.query("DELETE FROM Income WHERE id =?", [id]);
-
+            const { id_income } = req.params;
+            const [result] = await pool.query("DELETE FROM Income WHERE id_income =?", [id_income]);
+    
             if (result.affectedRows > 0) {
                 res.status(200).json({ message: "Income deleted successfully." });
             } else {
@@ -83,6 +83,8 @@ const IncomeController = {
             res.status(500).json({ message: "An error occurred while deleting income." });
         }
     }
+    
+    
 }
 
 module.exports = IncomeController;
@@ -99,5 +101,7 @@ module.exports = IncomeController;
 //     "date": "2024-05-09",
 //     "id_family": 15
 // }
+
+
 
 
