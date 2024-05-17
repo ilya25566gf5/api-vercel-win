@@ -3,11 +3,21 @@ const pool = require("../database/index");
 const IncomeController = {
     getAll: async (req, res) => {
         try {
-            const [rows, fields] = await pool.query("SELECT income_type, amount, date FROM Income");
+            // Объединяем все необходимые поля в запрос
+            const query = `
+                SELECT id_income, income_type, amount, date, id_family 
+                FROM Income;
+            `;
+            
+            const [rows, fields] = await pool.query(query);
+            
+            // Форматируем строки для отправки в ответе
             const formattedRows = rows.map(row => ({
+                idIncome: row.id_income,
                 incomeType: row.income_type,
                 amount: row.amount,
-                all: `${row.date.getFullYear()}-${String(row.date.getMonth() + 1).padStart(2, '0')}-${String(row.date.getDate()).padStart(2, '0')}`
+                date: `${row.date.getFullYear()}-${String(row.date.getMonth() + 1).padStart(2, '0')}-${String(row.date.getDate()).padStart(2, '0')}`,
+                idFamily: row.id_family
             }));
             
             res.json(formattedRows);
@@ -16,6 +26,8 @@ const IncomeController = {
             res.status(500).json({ message: "An error occurred while fetching data." });
         }
     },
+    
+    
 
     addIncome: async (req, res) => {
         try {
