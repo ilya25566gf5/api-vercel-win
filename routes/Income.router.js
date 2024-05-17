@@ -9,7 +9,7 @@ router.get("/", IncomeController.getAll);
 router.post("/", IncomeController.addIncome);
 
 // Метод обновления
-router.put("/:id", IncomeController.updateIncome); 
+router.put("/", IncomeController.updateIncome); 
 
 // Метод удаления - обновленный, использующий параметр :id вместо :id_income
 router.delete("/:id_income", IncomeController.deleteIncome); // Использование :id_income вместо :id
