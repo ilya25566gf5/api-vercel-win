@@ -66,28 +66,29 @@ const CompositionFamilyController = {
             res.status(500).json({ message: "An error occurred while fetching family details." });
         }
     },
-    addFamilyMember: async (req, res) => {
-        try {
-            if (!req.body.id_family ||!req.body.phone_number ||!req.body.first_name ||!req.body.last_name ||!req.body.password ||!req.body.code_species_relatedness) {
-                return res.status(400).json({ message: "Missing required fields." });
-            }
-            const { id_family, phone_number, first_name, last_name, password, code_species_relatedness } = req.body;
-
-            const [result] = await pool.query(
-                "INSERT INTO Composition_Family (id_family, phone_number, first_name, last_name, password, code_species_relatedness) VALUES (?,?,?,?,?,?)",
-                [id_family, phone_number, first_name, last_name, password, code_species_relatedness]
-            );
-
-            if (result.affectedRows > 0) {
-                res.status(201).json({ message: "Family member added successfully.", id: result.insertId });
-            } else {
-                res.status(500).json({ message: "Failed to add family member." });
-            }
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ message: "An error occurred while adding family member." });
+addFamilyMember: async (req, res) => {
+    try {
+        if (!req.body.phone_number ||req.body.first_name ||req.body.last_name ||req.body.password ||req.body.code_species_relatedness) {
+            return res.status(400).json({ message: "Missing required fields." });
         }
+        const { phone_number, first_name, last_name, password, code_species_relatedness } = req.body;
+
+        const [result] = await pool.query(
+            "INSERT INTO Composition_Family (phone_number, first_name, last_name, password, code_species_relatedness) VALUES (?,?,?,?,?)",
+            [phone_number, first_name, last_name, password, code_species_relatedness]
+        );
+
+        if (result.affectedRows > 0) {
+            res.status(201).json({ message: "Family member added successfully.", id: result.insertId });
+        } else {
+            res.status(500).json({ message: "Failed to add family member." });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "An error occurred while adding family member." });
     }
+}
+
 }
 
 module.exports = CompositionFamilyController;

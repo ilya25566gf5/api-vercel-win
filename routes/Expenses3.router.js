@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router(); //
-const ExpensesController3 = require("../controller/Expenses3.controller");
 
-router.get("/", ExpensesController3.getAllLastThree);// метод для вывода данных
-router.post("/", ExpensesController3.addExpense); // метод добавления
-router.put("/:id", ExpensesController3.updateExpense); //  метод обновления
+const AnalisController = require('../controller/Expenses3.controller'); // Убедитесь, что путь верный
+
+router.get('/', AnalisController.getExpensesSummary); // Используйте правильное имя контроллера
 
 module.exports = router;
+
+
